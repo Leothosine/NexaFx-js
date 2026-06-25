@@ -10,6 +10,7 @@ import { SupportTicket } from '../support/support-ticket.entity';
 import { WebhookEndpoint } from '../webhooks/webhook-endpoint.entity';
 import { AmlAlert } from '../aml/aml-alert.entity';
 import { SecurityModule } from '../common/security.module';
+import { AuditModule } from '../audit/audit.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SecurityModule } from '../common/security.module';
       AmlAlert,
     ]),
     SecurityModule,
+    AuditModule,
   ],
   controllers: [AdminController],
   providers: [AdminService, AdminCacheInvalidationService],

@@ -8,6 +8,7 @@ import { DataSource, Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Referral } from './referral.entity';
 import { WalletsService } from '../wallet/wallets.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class ReferralService {
@@ -16,10 +17,12 @@ export class ReferralService {
     private readonly referralRepo: Repository<Referral>,
     private readonly config: ConfigService,
     private readonly wallets: WalletsService,
+    private readonly users: UsersService,
     private readonly dataSource: DataSource,
   ) {}
 
   async generateCode(userId: string): Promise<string> {
+    await this.users.findById(userId);
     const code = `REF-${userId.slice(0, 8).toUpperCase()}-${Date.now().toString(36).toUpperCase()}`;
     return code;
   }
@@ -29,6 +32,8 @@ export class ReferralService {
     if (!programActive) {
       throw new BadRequestException('Referral program is not active');
     }
+
+    await this.users.findById(refereeId);
 
     const existing = await this.referralRepo.findOne({
       where: { refereeId },

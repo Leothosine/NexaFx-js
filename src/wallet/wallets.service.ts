@@ -45,6 +45,7 @@ export class WalletsService {
 
       const newBalance = Number(
         new Big(wallet.balance).plus(new Big(delta)).toFixed(8),
+        new Big(wallet.balance).plus(new Big(delta)).toFixed(2),
       );
       if (newBalance < 0) {
         throw new BadRequestException('Insufficient balance');
@@ -65,6 +66,10 @@ export class WalletsService {
   }
 
   async getBalance(accountId: string, currency: string): Promise<WalletBalance> {
+  async getBalance(
+    accountId: string,
+    currency: string,
+  ): Promise<WalletBalance> {
     const normalizedCurrency = this.validateCurrency(currency);
 
     const wallet = await this.walletRepository.findOne({

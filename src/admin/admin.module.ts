@@ -15,6 +15,7 @@ import { AmlAlert } from '../aml/aml-alert.entity';
 import { WalletBalanceEntity } from '../wallet/wallet-balance.entity';
 import { SecurityModule } from '../common/security.module';
 import { EncryptionModule } from '../common/encryption/encryption.module';
+import { AuditModule } from '../audit/audit.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { EncryptionModule } from '../common/encryption/encryption.module';
     SecurityModule,
     EncryptionModule,
     HttpModule,
+    AuditModule,
   ],
   controllers: [AdminController, SystemAdminController],
   providers: [AdminService, AdminCacheInvalidationService, KeyRotationService],

@@ -9,17 +9,24 @@ import {
   HttpStatus,
   Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   TransactionsService,
   TransferDto,
   ReverseTransactionDto,
   TransactionFilters,
+  DepositDto,
+  WithdrawalDto,
+  SwapDto,
 } from './transactions.service';
 import { TransactionStatus } from './transaction.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { AdminRoleGuard } from '../common/guards/admin-role.guard';
 import { IpAllowlistGuard } from '../common/guards/ip-allowlist.guard';
+import { Idempotent } from '../idempotency/idempotency.decorator';
+import { IdempotencyGuard } from '../idempotency/idempotency.guard';
+import { IdempotencyInterceptor } from '../idempotency/idempotency.interceptor';
 
 interface AuthenticatedRequest {
   user?: {
@@ -36,6 +43,33 @@ export class TransactionsController {
   @HttpCode(HttpStatus.CREATED)
   transfer(@Body() dto: TransferDto) {
     return this.txService.transfer(dto);
+  }
+
+  @Post('deposit')
+  @HttpCode(HttpStatus.CREATED)
+  @Idempotent()
+  @UseGuards(IdempotencyGuard)
+  @UseInterceptors(IdempotencyInterceptor)
+  deposit(@Body() dto: DepositDto) {
+    return this.txService.createDeposit(dto);
+  }
+
+  @Post('withdrawal')
+  @HttpCode(HttpStatus.CREATED)
+  @Idempotent()
+  @UseGuards(IdempotencyGuard)
+  @UseInterceptors(IdempotencyInterceptor)
+  withdrawal(@Body() dto: WithdrawalDto) {
+    return this.txService.createWithdrawal(dto);
+  }
+
+  @Post('swap')
+  @HttpCode(HttpStatus.CREATED)
+  @Idempotent()
+  @UseGuards(IdempotencyGuard)
+  @UseInterceptors(IdempotencyInterceptor)
+  swap(@Body() dto: SwapDto) {
+    return this.txService.createSwap(dto);
   }
 
   @Get()

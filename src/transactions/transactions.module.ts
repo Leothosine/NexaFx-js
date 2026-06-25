@@ -9,6 +9,7 @@ import { MailModule } from '../mail/mail.module';
 import { UsersModule } from '../users/users.module';
 import { AuthModule } from '../auth/auth.module';
 import { SecurityModule } from '../common/security.module';
+import { IdempotencyModule } from '../idempotency/idempotency.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { SecurityModule } from '../common/security.module';
     UsersModule,
     AuthModule,
     SecurityModule,
+    IdempotencyModule,
   ],
   controllers: [TransactionsController],
   providers: [TransactionsService],

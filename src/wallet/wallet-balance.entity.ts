@@ -25,6 +25,9 @@ export class WalletBalanceEntity {
 
   @Column({ type: 'boolean', default: false })
   isPrimary!: boolean;
+  /** Key version used to encrypt sensitive fields for this wallet. */
+  @Column({ type: 'int', default: 1 })
+  keyVersion!: number;
 
   @CreateDateColumn()
   createdAt!: Date;
